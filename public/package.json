@@ -1,0 +1,15 @@
+{
+  "name": "strikeup-store-serverless",
+  "version": "1.0.0",
+  "description": "StrikeUp Store — Vercel serverless entry (Root Directory = public). Serves the storefront SPA, /api/*, and the obscured /0301560/admin panel.",
+  "private": true,
+  "type": "module",
+  "main": "api/[...all].js",
+  "scripts": {
+    "build": "echo no-build-required"
+  },
+  "engines": {
+    "node": ">=20.11"
+  },
+  "license": "UNLICENSED"
+}
