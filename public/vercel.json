@@ -1,0 +1,18 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "functions": {
+    "api/[...all].js": {
+      "maxDuration": 30,
+      "includeFiles": [
+        "index.html",
+        "robots.txt",
+        "assets/**",
+        "0301560/**"
+      ]
+    }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api" }
+  ]
+}

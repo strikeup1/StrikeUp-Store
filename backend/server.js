@@ -1176,9 +1176,34 @@ async function adminDeleteReview(req, res, reviewId) {
 /* ------------------------------------------------------------------ */
 
 let indexShell = null;
+const FALLBACK_SHELL = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0a0a0f" />
+<meta name="robots" content="index, follow" />
+<title>__TITLE__</title>
+<meta name="description" content="__DESCRIPTION__" />
+<meta property="og:site_name" content="__OG_SITE_NAME__" />
+<meta property="og:title" content="__OG_TITLE__" />
+<meta property="og:description" content="__OG_DESCRIPTION__" />
+<meta property="og:image" content="__OG_IMAGE__" />
+<meta property="og:url" content="__OG_URL__" />
+<link rel="stylesheet" href="/assets/css/style.css" />
+</head>
+<body>
+<div id="app" class="site-shell"><section class="section fade-up" style="padding:4rem 0;"><div class="container" style="text-align:center;">StrikeUp Store is loading…</div></section></div>
+<script type="module" src="/assets/js/main.js"></script>
+</body>
+</html>`;
 async function getIndexShell() {
   if (indexShell) return indexShell;
-  indexShell = await fs.readFile(FRONTEND_INDEX, "utf8");
+  try {
+    indexShell = await fs.readFile(FRONTEND_INDEX, "utf8");
+  } catch {
+    indexShell = FALLBACK_SHELL;
+  }
   return indexShell;
 }
 
