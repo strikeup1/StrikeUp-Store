@@ -21,10 +21,10 @@ export const IMAGES_DIR = path.join(UPLOADS_DIR, "images");
 
 export const FRONTEND_DIR = path.join(PROJECT_ROOT, "public");
 export const FRONTEND_INDEX = path.join(FRONTEND_DIR, "index.html");
-export const ADMIN_INDEX = path.join(FRONTEND_DIR, "admin", "index.html");
 
 // Obscured admin path — /admin and /admin/* intentionally 404.
 export const ADMIN_PATH = "/0301560/admin";
+export const ADMIN_INDEX = path.join(FRONTEND_DIR, ADMIN_PATH.replace(/^\//, ""), "index.html");
 
 export const SESSION_COOKIE = "strike_store_session";
 export const SESSION_TTL_MS = 24 * 60 * 60 * 1000; // 1 day sliding
