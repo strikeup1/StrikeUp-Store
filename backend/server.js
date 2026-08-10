@@ -1383,6 +1383,7 @@ async function handler(req, res) {
   const method = req.method.toUpperCase();
 
   try {
+    await ensureSeeded();
     if (method === "GET" && pathname === "/health") return sendJson(res, 200, { ok: true });
     if ((method === "GET" || method === "HEAD") && pathname === "/favicon.ico") return sendNoContent(res);
 
@@ -1404,7 +1405,16 @@ async function handler(req, res) {
 
 const server = http.createServer(handler);
 
-await store.ensureSeed();
+let seedPromise = null;
+function ensureSeeded() {
+  if (!seedPromise) {
+    seedPromise = store.ensureSeed().catch((err) => {
+      seedPromise = null;
+      throw err;
+    });
+  }
+  return seedPromise;
+}
 
 if (!process.env.VERCEL) {
   server.listen(PORT, () => {
