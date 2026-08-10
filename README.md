@@ -27,8 +27,8 @@ Then open:
 | `PORT` | `8788` | HTTP port |
 | `STRIKEUP_STORE_ADMIN_USER` | `owner` | Admin username on first seed |
 | `STRIKEUP_STORE_ADMIN_PASSWORD` | dev default | Admin password (set a strong one) |
-| `STRIKEUP_STORE_DATA_DIR` | `./backend/data` | JSON data location (persistent volume) |
-| `STRIKEUP_STORE_UPLOADS_DIR` | `./backend/uploads` | Uploaded APK / image location |
+| `STRIKEUP_STORE_DATA_DIR` | `./backend/data` | JSON data location (persistent volume; `/tmp` on Vercel) |
+| `STRIKEUP_STORE_UPLOADS_DIR` | `./backend/uploads` | Uploaded APK / image location (`/tmp` on Vercel) |
 
 Pass them via environment, `.env` with `node --env-file=.env server.js`, or your hosting control panel.
 
@@ -55,17 +55,21 @@ docker run -p 8788:8788 -e STRIKEUP_STORE_ADMIN_PASSWORD=strong-pass \
 2. Set the environment variables above in the cPanel Node.js app settings.
 3. If cPanel proxies from a subpath, the storefront assumes it is served at the domain root.
 
-### Netlify / Vercel (static)
+### Vercel (serverless)
 
-These are static hosts and cannot serve this app's API directly. Options:
-- Run the backend on any Node PaaS/VPS and point Netlify at it (not supported out of the box), or
-- Use Vercel serverless functions wrapping the API (requires conversion work).
+The repo ships with first-class Vercel support:
 
-For a zero-config single deploy, prefer the Docker/Node host above.
+```bash
+npx vercel
+```
+
+- The whole app — API **and** storefront SPA — runs in a single serverless function (`api/[...all].js` imports `backend/server.js`). `vercel.json` rewrites all non-asset routes into it, while `public/` assets are served straight from the CDN.
+- Set `STRIKEUP_STORE_ADMIN_PASSWORD` (and the other variables above) in Vercel > Project > Settings > Environment Variables. The admin panel stays reachable at your `*.vercel.app` URL via the obscured admin path.
+- Serverless caveats: `backend/data` and `backend/uploads` live under `/tmp` on Vercel and are **volatile** — apps, reviews, uploads and analytics do not persist across cold starts, and large APK uploads may exceed the function duration cap. If you need durable storage or multi-GB uploads, use the Docker/Node deployment above.
 
 ## Performance notes
 
-- CSS/JS are minified (`frontend/assets/*`).
+- CSS/JS are minified (`public/assets/*`).
 - The server gzips HTML/CSS/JS/JSON/SVG responses automatically for gzip-capable clients.
 - Nothing is rendered server-side per request on the storefront; the SPA fetches `/api/*` JSON.
 

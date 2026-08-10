@@ -6,14 +6,20 @@ export const PROJECT_ROOT = path.resolve(BACKEND_ROOT, "..");
 
 export const PORT = Number(process.env.PORT || 8788);
 
+// Serverless (Vercel) runtimes only persist within /tmp per function instance.
+export const IS_VERCEL = !!process.env.VERCEL;
+const VOLATILE_ROOT = IS_VERCEL ? "/tmp" : path.join(BACKEND_ROOT, "var");
+
 export const DATA_DIR =
-  process.env.STRIKEUP_STORE_DATA_DIR || path.join(BACKEND_ROOT, "data");
+  process.env.STRIKEUP_STORE_DATA_DIR ||
+  (IS_VERCEL ? path.join(VOLATILE_ROOT, "strikeup-data") : path.join(BACKEND_ROOT, "data"));
 export const UPLOADS_DIR =
-  process.env.STRIKEUP_STORE_UPLOADS_DIR || path.join(BACKEND_ROOT, "uploads");
+  process.env.STRIKEUP_STORE_UPLOADS_DIR ||
+  (IS_VERCEL ? path.join(VOLATILE_ROOT, "strikeup-uploads") : path.join(BACKEND_ROOT, "uploads"));
 export const APKS_DIR = path.join(UPLOADS_DIR, "apks");
 export const IMAGES_DIR = path.join(UPLOADS_DIR, "images");
 
-export const FRONTEND_DIR = path.join(PROJECT_ROOT, "frontend");
+export const FRONTEND_DIR = path.join(PROJECT_ROOT, "public");
 export const FRONTEND_INDEX = path.join(FRONTEND_DIR, "index.html");
 export const ADMIN_INDEX = path.join(FRONTEND_DIR, "admin", "index.html");
 

@@ -1,0 +1,17 @@
+{
+  "name": "strikeup-store",
+  "version": "1.0.0",
+  "description": "StrikeUp Store — zero-dependency Node.js app store (apps catalog, auth, uploads). Deploys to Docker/Render or Vercel (serverless).",
+  "type": "module",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "test": "node --test backend",
+    "dev": "node --watch backend/server.js"
+  },
+  "engines": {
+    "node": ">=20.11"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}

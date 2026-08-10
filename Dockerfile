@@ -9,7 +9,7 @@ COPY backend/package.json backend/
 COPY backend/server.js backend/
 COPY backend/lib/ backend/lib/
 
-COPY frontend/ frontend/
+COPY public/ public/
 
 # Persistent volumes for site data and uploads (keep across restarts).
 ENV STRIKEUP_STORE_DATA_DIR=/app/backend/data

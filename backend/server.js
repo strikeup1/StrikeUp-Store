@@ -1319,7 +1319,7 @@ async function serveStatic(req, res, pathname) {
     return serveFile(res, req, ADMIN_INDEX);
   }
 
-  // Explicit assets — never anything outside frontend/
+  // Explicit assets — never anything outside public/
   const rel = pathname === "/" ? "/index.html" : pathname;
   const target = path.resolve(FRONTEND_DIR, "." + rel);
   if (target !== FRONTEND_DIR && !target.startsWith(FRONTEND_DIR + path.sep)) {
@@ -1343,7 +1343,7 @@ async function serveStatic(req, res, pathname) {
 /* Server                                                              */
 /* ------------------------------------------------------------------ */
 
-const server = http.createServer(async (req, res) => {
+async function handler(req, res) {
   const headers = securityHeaders(req);
   for (const [k, v] of Object.entries(headers)) res.setHeader(k, v);
 
@@ -1375,12 +1375,18 @@ const server = http.createServer(async (req, res) => {
     console.error("[server] unhandled error:", err);
     if (!res.headersSent) sendJson(res, 500, { error: "Internal server error" });
   }
-});
+}
+
+const server = http.createServer(handler);
 
 await store.ensureSeed();
 
-server.listen(PORT, () => {
-  console.log(`StrikeUp Store server listening on :${PORT}`);
-  console.log(`  Public site: http://localhost:${PORT}/`);
-  console.log(`  Admin panel: http://localhost:${PORT}${ADMIN_PATH}`);
-});
+if (!process.env.VERCEL) {
+  server.listen(PORT, () => {
+    console.log(`StrikeUp Store server listening on :${PORT}`);
+    console.log(`  Public site: http://localhost:${PORT}/`);
+    console.log(`  Admin panel: http://localhost:${PORT}${ADMIN_PATH}`);
+  });
+}
+
+export default handler;
