@@ -1,0 +1,17 @@
+{
+  "name": "strikeup-store-backend",
+  "version": "1.0.0",
+  "description": "StrikeUp Store — zero-dependency Node.js backend (apps catalog, auth, sessions, CSRF, rate limiting, file uploads, file-backed storage)",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20.11"
+  },
+  "keywords": ["app-store", "apk", "strike-up", "catalog"],
+  "license": "UNLICENSED",
+  "private": true
+}
