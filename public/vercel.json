@@ -13,9 +13,15 @@
           "0301560/**"
         ]
       }
-    }
+    },
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "robots.txt", "use": "@vercel/static" },
+    { "src": "assets/**", "use": "@vercel/static" },
+    { "src": "0301560/admin/index.html", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/api/index.js" }
+    { "handle": "filesystem" },
+    { "src": "/admin($|/.*)", "dest": "/__admin_blocked__" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
